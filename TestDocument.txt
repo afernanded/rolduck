@@ -1,2 +1,0 @@
-Start -> npm run dev
-Start client -> cd client - npm start

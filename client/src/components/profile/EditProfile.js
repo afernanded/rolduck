@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { checkImage } from "../../utils/imageUpload";
 import { GLOBALTYPES } from "../../redux/actions/globalTypes";
+import { updateProfileUser } from "../../redux/actions/profileAction";
 
 const EditProfile = ({ setOnEdit }) => {
   const initState = {
@@ -32,10 +33,15 @@ const EditProfile = ({ setOnEdit }) => {
     setAvatar(file);
   };
 
-  const handleInput = (e) => {
+  const handleInput = e => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    dispatch(updateProfileUser({userData,avatar, auth}))
+  }
 
   return (
     <div className="edit_profile">
@@ -46,7 +52,7 @@ const EditProfile = ({ setOnEdit }) => {
         Close
       </button>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="info_avatar">
           <img
             src={avatar ? URL.createObjectURL(avatar) : auth.user.avatar}
@@ -116,7 +122,7 @@ const EditProfile = ({ setOnEdit }) => {
           <label htmlFor="website">Website</label>
           <input
             type="text"
-            name="address"
+            name="website"
             value={website}
             className="form-control"
             onChange={handleInput}
@@ -142,6 +148,7 @@ const EditProfile = ({ setOnEdit }) => {
           <select
             name="gender"
             id="gender"
+            value={gender}
             className="custom-select text-capitalize"
             onChange={handleInput}
           >

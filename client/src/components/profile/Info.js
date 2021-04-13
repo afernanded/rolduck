@@ -40,7 +40,7 @@ const Info = () => {
                   Edit profile
                 </button>
               ) : (
-                <FollowBtn />
+                <FollowBtn user={user}/>
               )}
             </div>
             <div className="follow_btn">

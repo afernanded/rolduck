@@ -1,10 +1,12 @@
-import { GLOBALTYPES } from "./globalTypes";
+import { GLOBALTYPES, DeleteData } from "./globalTypes";
 import { getDataAPI, patchDataAPI } from "../../utils/fetchData";
 import { imageUpload } from "../../utils/imageUpload";
 
 export const PROFILE_TYPES = {
   LOADING: "LOADING",
   GET_USER: "GET_USER",
+  FOLLOW: 'FOLLOW',
+  UNFOLLOW: 'UNFOLLOW'
 };
 
 export const getProfileUsers = ({ users, id, auth }) => async (dispatch) => {
@@ -79,3 +81,38 @@ export const updateProfileUser = ({ userData, avatar, auth }) => async (
     });
   }
 };
+
+
+export const follow = ({users, user, auth}) => async (dispatch) => {
+  let newUser = {...user, followers: [...user.followers, auth.user]}
+
+  dispatch({
+    type: PROFILE_TYPES.FOLLOW,
+    payload: newUser
+  })
+
+  dispatch({
+    type: GLOBALTYPES.AUTH,
+    payload: {
+      ...auth,
+      user: {...auth.user, followed: [...auth.user.followed, newUser]}
+    }
+  })
+}
+
+export const unfollow = ({users, user, auth}) => async (dispatch) => {
+  let newUser = {...user, followers: DeleteData(user.followers, auth.user._id)}
+
+  dispatch({
+    type: PROFILE_TYPES.UNFOLLOW,
+    payload: newUser
+  })
+
+  dispatch({
+    type: GLOBALTYPES.AUTH,
+    payload: {
+      ...auth,
+      user: {...auth.user, followed: DeleteData(auth.user.followed, newUser._id)}
+    }
+  })
+}

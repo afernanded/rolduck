@@ -60,7 +60,7 @@ const authController = {
       const { email, password } = req.body;
 
       const user = await Users.findOne({ email }).populate(
-        "followers followed",
+        "followers following",
         "-password"
       );
 
@@ -117,7 +117,7 @@ const authController = {
           console.log(result);
           const user = await Users.findById(result.id)
             .select("-password")
-            .populate("followers followed", "-password");
+            .populate("followers following", "-password");
 
           if (!user)
             return res.status(400).json({ msg: "This does not exist." });

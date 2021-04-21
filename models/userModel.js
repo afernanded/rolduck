@@ -60,7 +60,7 @@ const userSchema = new mongoose.Schema(
         ref: "user",
       },
     ],
-    followed: [
+    following: [
       {
         type: mongoose.Types.ObjectId,
         ref: "user",

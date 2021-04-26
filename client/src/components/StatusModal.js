@@ -1,78 +1,97 @@
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
+import { createPost } from "../redux/actions/postAction";
 
 const StatusModal = () => {
   const { auth, theme } = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  const [content, setContent] = useState("");
-  const [images, setImages] = useState([])
+  const [content, setContent] = useState('');
+  const [images, setImages] = useState([]);
 
-  const [stream, setStream] = useState(false)
-  const videoRef = useRef()
-  const refCanvas = useRef()
-  const [tracks, setTracks] = useState('')
+  const [stream, setStream] = useState(false);
+  const videoRef = useRef();
+  const refCanvas = useRef();
+  const [tracks, setTracks] = useState('');
 
-  const handleChangeImages = e => {
-    const files = [...e.target.files]
-    let err = ""
-    let newImages = []
+  const handleChangeImages = (e) => {
+    const files = [...e.target.files];
+    let err = "";
+    let newImages = [];
 
-    files.forEach(file => {
-      if(!file) return err = "File does not exist."
+    files.forEach((file) => {
+      if (!file) return (err = "File does not exist.");
 
-      if(file.type !== 'image/jpeg' && file.type !== 'image/png'){
-        return err = "Image format is incorrect."
+      if (file.type !== "image/jpeg" && file.type !== "image/png") {
+        return (err = "Image format is incorrect.");
       }
 
-      return newImages.push(file)
-    })
+      return newImages.push(file);
+    });
 
-    if(err) dispatch({ type: GLOBALTYPES.ALERT, payload: {error: err} })
-    setImages([...images, ...newImages])
-  }
+    if (err) dispatch({ type: GLOBALTYPES.ALERT, payload: { error: err } });
+    setImages([...images, ...newImages]);
+  };
 
   const deleteImages = (index) => {
-    const newArr = [...images]
-    newArr.splice(index, 1)
-    setImages(newArr)
-  } 
+    const newArr = [...images];
+    newArr.splice(index, 1);
+    setImages(newArr);
+  };
 
   const handleStream = () => {
-    setStream(true)
-    if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
-      navigator.mediaDevices.getUserMedia({video: true})
-      .then(mediaStream => {
-          videoRef.current.srcObject = mediaStream
-          videoRef.current.play()
-          const track = mediaStream.getTracks()
-          setTracks(track[0])
-      }).catch(err => console.log(err))
+    setStream(true);
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(mediaStream => {
+          videoRef.current.srcObject = mediaStream;
+          videoRef.current.play();
+          const track = mediaStream.getTracks();
+          setTracks(track[0]);
+        })
+        .catch((err) => console.log(err));
     }
-  }
+  };
 
   const handleCapture = () => {
     const width = videoRef.current.clientWidth;
     const height = videoRef.current.clientHeight;
 
-    refCanvas.current.setAttribute("width", width)
-    refCanvas.current.setAttribute("height", height)
+    refCanvas.current.setAttribute("width", width);
+    refCanvas.current.setAttribute("height", height);
 
-    const ctx = refCanvas.current.getContext('2d')
-    ctx.drawImage(videoRef.current, 0, 0, width, height)
-    let URL = refCanvas.current.toDataURL()
-    setImages([...images, {camera: URL}])
-  }
+    const ctx = refCanvas.current.getContext("2d");
+    ctx.drawImage(videoRef.current, 0, 0, width, height);
+    let URL = refCanvas.current.toDataURL();
+    setImages([...images, { camera: URL }]);
+  };
 
-  const handleStopStream = () =>  {
-    
-    setStream(false)
-  }
+  const handleStopStream = () => {
+    //tracks.stop()
+    setStream(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (images.length === 0)
+      return dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: "Please add your photo." },
+      });
+
+    dispatch(createPost({ content, images, auth }));
+
+    setContent("");
+    setImages([]);
+    if (tracks) tracks.stop();
+    dispatch({ type: GLOBALTYPES.STATUS, payload: false });
+  };
 
   return (
     <div className="status_modal">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="status_header">
           <h5 className="m-0">Create Post</h5>
           <span
@@ -95,37 +114,44 @@ const StatusModal = () => {
             onChange={(e) => setContent(e.target.value)}
           />
 
-            <div className="show_images">
-              {
-                images.map((img, index) => (
-                  <div key={index} id="file_img">
-                    <img src={img.camera ? img.camera : URL.createObjectURL(img)}
-                    alt="images" className="img-thumbnail"
-                    style={{filter: theme ? 'invert(1)' : 'invert(0)'}}
-                    />
-                    <span onClick={() => deleteImages(index)}>&times;</span>
-                  </div>
-                ))
-              }
-            </div>
+          <div className="show_images">
+            {images.map((img, index) => (
+              <div key={index} id="file_img">
+                <img
+                  src={img.camera ? img.camera : URL.createObjectURL(img)}
+                  alt="images"
+                  className="img-thumbnail"
+                  style={{ filter: theme ? "invert(1)" : "invert(0)" }}
+                />
+                <span onClick={() => deleteImages(index)}>&times;</span>
+              </div>
+            ))}
+          </div>
 
-              {
-                stream &&
-                <div className="stream position-relative">
-                  <video autoPlay muted ref={videoRef} width="100%" height="100%"
-                  style={{filter: theme ? 'invert(1)' : 'invert(0)'}} />
-                
-                <span onClick={handleStopStream}>&times;</span>
-                <canvas ref={refCanvas} style={{display: 'none'}}/>
-                </div>
-              }
+          {stream && (
+            <div className="stream position-relative">
+              <video
+                autoPlay
+                muted
+                ref={videoRef}
+                width="100%"
+                height="100%"
+                style={{ filter: theme ? "invert(1)" : "invert(0)" }}
+              />
+
+              <span onClick={handleStopStream}>&times;</span>
+              <canvas ref={refCanvas} style={{ display: "none" }} />
+            </div>
+          )}
 
           <div className="input_images">
             {
-              stream
-              ? <i className="fas fa-camera" onClick={handleCapture}/>
-              : <>
-                <i className="fas fa-camera" onClick={handleStream}/>
+            stream 
+            ? 
+            (<i className="fas fa-camera" onClick={handleCapture} />) 
+            : (
+              <>
+                <i className="fas fa-camera" onClick={handleStream} />
 
                 <div className="file_upload">
                   <i className="fas fa-image" />
@@ -134,17 +160,19 @@ const StatusModal = () => {
                     name="file"
                     id="file"
                     multiple
-                    accept="image/*" onChange={handleChangeImages}
+                    accept="image/*"
+                    onChange={handleChangeImages}
                   />
-                </div>              
+                </div>
               </>
-            }
-            
+            )}
           </div>
         </div>
-      
+
         <div className="status_footer">
-            <button className="btn btn-secondary w-100">Post</button>
+          <button className="btn btn-secondary w-100" type="submit">
+            Post
+          </button>
         </div>
       </form>
     </div>

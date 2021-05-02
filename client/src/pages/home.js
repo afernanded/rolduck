@@ -18,8 +18,7 @@ const Home = () => {
                         ? <h2 className="text-center">No Post</h2>
                         : <Posts />
                 }
-
-                <Posts />
+                
             </div>
             <div className="col-md-4">
 

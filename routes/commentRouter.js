@@ -4,5 +4,14 @@ const auth = require('../middleware/auth')
 
 router.post('/comment', auth, commentController.createComment)
 
+router.patch('/comment/:id', auth, commentController.updateComment)
+
+router.patch('/comment/:id/like', auth, commentController.likeComment)
+
+router.patch('/comment/:id/unlike', auth, commentController.unLikeComment)
+
+
+
+
 
 module.exports = router

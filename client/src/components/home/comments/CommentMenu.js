@@ -1,19 +1,20 @@
 import React from 'react'
 
-const MenuItem = () => {
-    return (
-        <>
-        <div className="dropdown-item">
-            <span className="material-icons">create</span> Edit
-        </div>
-        <div className="dropdown-item">
-            <span className="material-icons">delete_outline</span> Remove
-        </div>
-        </>
-    )
-}
+const CommentMenu = ({post, comment, auth, setOnEdit}) => {
+    const MenuItem = () => {
+        return (
+            <>
+            <div className="dropdown-item" onClick={() => setOnEdit(true)}>
+                <span className="material-icons">create</span> Edit
+            </div>
+            <div className="dropdown-item">
+                <span className="material-icons">delete_outline</span> Remove
+            </div>
+            </>
+        )
+    }
 
-const CommentMenu = ({post, comment, auth}) => {
+
     return (
         <div className="menu">
             {

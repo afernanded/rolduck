@@ -10,6 +10,7 @@ router.patch('/comment/:id/like', auth, commentController.likeComment)
 
 router.patch('/comment/:id/unlike', auth, commentController.unLikeComment)
 
+router.delete('/comment/:id', auth, commentController.deleteComment)
 
 
 

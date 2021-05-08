@@ -3,7 +3,7 @@ import { getDataAPI } from '../../utils/fetchData';
 
 export const DISCOVER_TYPES = {
     LOADING: 'LOADING_DISCOVER',
-    GET_POSTS: 'GET_DICOVER_POSTS',
+    GET_POSTS: 'GET_DISCOVER_POSTS',
     UPDATE_POST: 'UPDATE_DISCOVER_POST'
 }
 
@@ -12,6 +12,7 @@ export const getDiscoverPosts = (token) => async (dispatch) => {
         dispatch({type: DISCOVER_TYPES.LOADING, payload: true})
 
         const res = await getDataAPI(`post_discover`, token)
+        console.log(res)
         dispatch({type: DISCOVER_TYPES.GET_POSTS, payload: res.data})
 
         dispatch({type: DISCOVER_TYPES.LOADING, payload: false})

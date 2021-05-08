@@ -118,10 +118,10 @@ const postController = {
             return res.status(500).json({msg: err.message})
         }
     },
-    getUserPosts: async (req, res) => {
-        const features = new APIfeatures(Posts.find({user: req.params.id}), req.query)
-        .paginating()
+    getUserPosts: async (req, res) => { 
         try {
+            const features = new APIfeatures(Posts.find({user: req.params.id}), req.query)
+            .paginating()
             const posts = await features.query.sort("-createdAt")
 
             res.json({
@@ -154,13 +154,12 @@ const postController = {
     },
     getPostsDiscover: async (req, res) => {
         try {
-            
             const newArr = [...req.user.following, req.user._id]
 
             const num = req.query.num || 9
 
             const posts = await Posts.aggregate([
-                { $match: { user: { $nin: newArr } } },
+                { $match: { user : { $nin: newArr } } },
                 { $sample: { size: Number(num) } },
             ])
 

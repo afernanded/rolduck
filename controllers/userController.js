@@ -41,15 +41,16 @@ const userController = {
            const user = await Users.find({_id: req.params.id, followers: req.user._id})
             if(user.length > 0) return res.status(500).json({msg: "You following this user."})
 
-            await Users.findOneAndUpdate({_id: req.params.id}, {
+            const newUser = await Users.findOneAndUpdate({_id: req.params.id}, {
                 $push: {followers: req.user._id}
-            }, {new: true})
+            }, {new: true}).populate("followers following", "-password")
             
             await Users.findOneAndUpdate({_id: req.user._id}, {
                 $push: {following: req.params.id}
             }, {new: true})
 
-            res.json({msg: 'Followed User.'})
+            res.json({newUser})
+
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
@@ -57,15 +58,16 @@ const userController = {
     unfollow: async (req, res) => {
         try {
 
-            await Users.findOneAndUpdate({_id: req.params.id}, {
+            const newUser = await Users.findOneAndUpdate({_id: req.params.id}, {
                 $pull: {followers: req.user._id}
-            }, {new: true})
+            }, {new: true}).populate("followers following", "-password")
             
             await Users.findOneAndUpdate({_id: req.user._id}, {
                 $pull: {following: req.params.id}
             }, {new: true})
 
-            res.json({msg: 'Unfollow User.'})
+            res.json({newUser})
+            
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }

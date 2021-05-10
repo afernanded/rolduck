@@ -13,7 +13,7 @@ const SocketServer = (socket) => {
 
     // Likes
     socket.on('likePost', newPost => {
-        const ids = [...newPost.user.followers, newPost.user._id]
+        const ids = [newPost.user._id]
         const clients = users.filter(user => ids.includes(user.id))
 
         if (clients.length > 0) {
@@ -24,7 +24,7 @@ const SocketServer = (socket) => {
     })
 
     socket.on('unLikePost', newPost => {
-        const ids = [...newPost.user.followers, newPost.user._id]
+        const ids = [newPost.user._id]
         const clients = users.filter(user => ids.includes(user.id))
         
         if (clients.length > 0) {
@@ -66,6 +66,27 @@ const SocketServer = (socket) => {
     socket.on('unFollow', newUser => {
         const user = users.find(user => user.id === newUser._id)
         user && socket.to(`${user.socketId}`).emit('unFollowToClient', newUser)
+    })
+
+    // Notification
+    socket.on('createNotify', msg => {
+        const clients = users.filter(user => msg.recipients.includes(user.id))
+        
+        if (clients.length > 0) {
+            clients.forEach(client => {
+                socket.to(`${client.socketId}`).emit('createNotifyToClient', msg)
+            })
+        }
+    })
+
+    socket.on('removeNotify', msg => {
+        const clients = users.filter(user => msg.recipients.includes(user.id))
+        
+        if (clients.length > 0) {
+            clients.forEach(client => {
+                socket.to(`${client.socketId}`).emit('removeNotifyToClient', msg)
+            })
+        }
     })
 
 

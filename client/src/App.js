@@ -25,10 +25,11 @@ import { getNotifies } from  './redux/actions/notifyAction';
 
 function App() {
   const { auth, status, modal } = useSelector(state => state)
-  const dispatch = useDispatch(state => state)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(refreshToken())
+
     const socket = io()
     dispatch({type: GLOBALTYPES.SOCKET, payload: socket})
     return () => socket.close()
@@ -41,6 +42,19 @@ function App() {
       dispatch(getNotifies(auth.token))
     }
   }, [dispatch, auth.token])
+
+
+  useEffect(() => {
+    if (!("Notification" in window)) {
+      alert("This browser does not support desktop notification");
+    }
+    else if (Notification.permission === "granted") {}
+    else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then(function (permission) {
+        if (permission === "granted") {}
+      });
+    }
+  }, [])
 
   return (
     <Router>

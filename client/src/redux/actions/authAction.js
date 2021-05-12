@@ -92,7 +92,6 @@ export const register = (data) => async (dispatch) => {
   }
 }
 
-
 export const logout = (data) => async (dispatch) => {
   try {
     localStorage.removeItem('firstLogin')

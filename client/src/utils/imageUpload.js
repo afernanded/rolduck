@@ -26,7 +26,7 @@ export const imageUpload = async (images) => {
     formData.append("upload_preset", "rolduck_social")
     formData.append("cloud_name", "rolduck")
 
-    const res = await fetch("https://api.cloudinary.com/v1_1/rolduck/image/upload", {
+    const res = await fetch("https://api.cloudinary.com/v1_1/rolduck/upload", {
       method: "POST",
       body: formData
     })

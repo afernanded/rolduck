@@ -1,0 +1,9 @@
+.reactions{
+    display: grid;
+    grid-template-columns: repeat(18, 25px);
+    text-align: center;
+    cursor: pointer;
+}
+.reactions span{
+    margin: 3px 0;
+}

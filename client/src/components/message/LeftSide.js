@@ -42,7 +42,7 @@ const LeftSide = () => {
 
     const isActive = (user) => {
         if(id === user._id) return 'active';
-        return ''
+        return ' '
     }
 
     return (

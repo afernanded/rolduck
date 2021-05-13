@@ -96,14 +96,14 @@ const LeftSide = () => {
                     </>
                     : <>
                         {
-                            message.users.map(user => {
+                            message.users.map(user => (
                                 <div key={user._id} className={`message_user ${isActive(user)}`}
                                 onClick={() => handleAddUser(user)}>
                                         <UserCard user={user} msg={true}>
                                             <i className="fas fa-circle" />
                                         </UserCard>
                                 </div>
-                            })
+                            ))
                         }
                     </>
                 }

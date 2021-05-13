@@ -89,6 +89,12 @@ const SocketServer = (socket) => {
         }
     })
 
+    // Message
+    socket.on('addMessage', msg => {
+        const user = users.find(user => user._id === msg.recipient)
+        user && socket.to(`${user.socketId}`).emit('addMessageToClient', msg)
+    })
+
 
 }
 

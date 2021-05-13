@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { POST_TYPES } from './redux/actions/postAction';
 import { GLOBALTYPES } from './redux/actions/globalTypes';
 import { NOTIFY_TYPES } from './redux/actions/notifyAction';
+import { MESS_TYPE } from './redux/actions/messageAction';
+
 import audioBell from './audio/bell.mp3';
 
 
@@ -94,6 +96,15 @@ const SocketClient = () => {
             dispatch({type: NOTIFY_TYPES.REMOVE_NOTIFY, payload: msg})
         })
         return () => socket.off('removeNotifyToClient')
+    }, [socket, dispatch])
+
+    // Message
+    useEffect(() => {
+        socket.on('addMessageToClient', msg => {
+            dispatch({type: MESS_TYPE.ADD_MESSAGE, payload: msg})
+        })
+        
+        return () => socket.off('addMessageToClient')
     }, [socket, dispatch])
     
     

@@ -8,7 +8,7 @@ import { MESS_TYPE, getConversations } from '../../redux/actions/messageAction';
 
 
 const LeftSide = () => {
-    const { auth, message } = useSelector(state => state)
+    const { auth, message, online } = useSelector(state => state)
     const dispatch = useDispatch()
 
     const [search, setSearch] = useState('')
@@ -40,6 +40,7 @@ const LeftSide = () => {
         setSearch('')
         setSearchUsers([])
         dispatch({type: MESS_TYPE.ADD_USER, payload: {...user, text: '', media: []}})
+        dispatch({type: MESS_TYPE.CHECK_ONLINE_OFFLINE, payload: online})
         return history.push(`/message/${user._id}`)
     }
 
@@ -54,7 +55,7 @@ const LeftSide = () => {
     }, [dispatch, auth, message.firstLoad])
 
             // Load more
-            useEffect(() => {
+    useEffect(() => {
                 const observer = new IntersectionObserver(entries => {
                     if (entries[0].isIntersecting) {
                         setPage(p => p + 1)
@@ -64,13 +65,22 @@ const LeftSide = () => {
                 })
         
                 observer.observe(pageEnd.current)
-            }, [setPage])
+    }, [setPage])
         
-            useEffect(() => {
+    useEffect(() => {
                 if (message.resultUsers >= (page - 1) * 9 && page > 1) {
                     dispatch(getConversations({auth, page}))
                 }
-            }, [message.resultUsers, page, auth, dispatch])
+    }, [message.resultUsers, page, auth, dispatch])
+
+    
+    //Check User Online - Offline
+    useEffect(() => {
+        if(message.firstLoad) {
+            dispatch({type: MESS_TYPE.CHECK_ONLINE_OFFLINE, payload: online})
+        } 
+    }, [online, message.firstLoad, dispatch])
+
 
     return (
         <>
@@ -100,7 +110,13 @@ const LeftSide = () => {
                                 <div key={user._id} className={`message_user ${isActive(user)}`}
                                 onClick={() => handleAddUser(user)}>
                                         <UserCard user={user} msg={true}>
-                                            <i className="fas fa-circle" />
+                                            {
+                                                user.online
+                                                ? <i className="fas fa-circle text-success" />
+                                                : auth.user.following.find(item => 
+                                                    item._id === user._id
+                                                ) && <i className="fas fa-circle" />
+                                            }
                                         </UserCard>
                                 </div>
                             ))

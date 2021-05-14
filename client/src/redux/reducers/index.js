@@ -12,6 +12,8 @@ import suggestions from './suggestionsReducer'
 import socket from './socketReducer'
 import notify from './notifyReducer'
 import message from './messageReducer'
+import online from './onlineReducer'
+
 
 
 
@@ -33,5 +35,6 @@ export default combineReducers ({
     suggestions,
     socket,
     notify,
-    message
+    message,
+    online
 })

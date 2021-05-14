@@ -10,7 +10,7 @@ router.get('/message/:id', auth, messageController.getMessage)
 
 router.delete('/message/:id', auth, messageController.deleteMessages)
 
-
+router.delete('/conversation/:id', auth, messageController.deleteConversation)
 
 
 module.exports = router

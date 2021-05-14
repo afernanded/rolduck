@@ -146,7 +146,7 @@ const SocketClient = () => {
     // Check User Offline
     useEffect(() => {
         socket.on('CheckUserOffline', id => {
-               dispatch({type: GLOBALTYPES.ONLINE, payload: id})
+               dispatch({type: GLOBALTYPES.OFFLINE, payload: id})
         })
         
         return () => socket.off('CheckUserOffline')

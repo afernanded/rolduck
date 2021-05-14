@@ -15,7 +15,9 @@ const SocketServer = (socket) => {
             )
 
             if (clients.length > 0) {
-                socket.to(`${clients.socketId}`).emit('CheckUserOffline', data.id)
+                clients.forEach(client => {
+                    socket.to(`${client.socketId}`).emit('CheckUserOffline', data.id)
+                })
             }
         }
 

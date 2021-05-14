@@ -15,13 +15,6 @@ import message from './messageReducer'
 import online from './onlineReducer'
 
 
-
-
-
-
-
-
-
 export default combineReducers ({
     auth,
     alert,

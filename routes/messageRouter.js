@@ -8,6 +8,9 @@ router.get('/conversations', auth, messageController.getConversations)
 
 router.get('/message/:id', auth, messageController.getMessage)
 
+router.delete('/message/:id', auth, messageController.deleteMessages)
+
+
 
 
 module.exports = router

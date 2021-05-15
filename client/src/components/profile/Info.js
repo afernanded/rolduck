@@ -38,7 +38,12 @@ const Info = ({id, auth, profile, dispatch}) => {
           <Avatar src={user.avatar} size="super-avatar" />
           <div className="info_content">
             <div className="info_content_title">
-              <h2>{user.username}</h2>
+              {
+                user.role !== 'verified'
+                ? <h3 className="pr-4 pt-1">{user.username}</h3>
+                : <h3 className="pr-2 pt-1">{user.username} <span className="material-icons text-primary">verified</span></h3>
+              }
+              
               {user._id === auth.user._id ? (
                 <button
                   className="btn btn-outline-info"
@@ -54,11 +59,10 @@ const Info = ({id, auth, profile, dispatch}) => {
               <span className="mr-4" onClick={() => setShowFollowers(true)}>{user.followers.length} Followers</span>
               <span className="ml-4" onClick={() => setShowFollowing(true)}>{user.following.length} Following</span>
             </div>
-            <h6>
+            <h6 className="pt-2">
               {user.fullname} <span className="text-danger">{user.mobile}</span>
             </h6>
             <p className="m-0">{user.address}</p>
-            <h6 className="m-0">{user.email}</h6>
             <a href={user.website} target="_blank" rel="noreferrer">
               {user.website}
             </a>

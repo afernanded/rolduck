@@ -32,7 +32,7 @@ const Menu = () => {
         ))}
 
 
-        <li className="nav-item dropdown" style={{opacity: 1}}>
+        <li className="nav-item dropdown px-2" style={{opacity: 1}}>
           <span
             className="nav-link position-relative"
             id="navbarDropdown"

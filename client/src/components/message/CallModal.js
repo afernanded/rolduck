@@ -5,7 +5,7 @@ import { GLOBALTYPES } from '../../redux/actions/globalTypes';
 
 
 const CallModal = () => {
-    const { call } = useSelector(state => state)
+    const { call, auth, peer, socket } = useSelector(state => state)
     const dispatch = useDispatch()
 
     const [hours, setHours] = useState(0)
@@ -34,7 +34,11 @@ const CallModal = () => {
 
     // End Call
     const handleEndCall = () => {
-        dispatch({ type: GLOBALTYPES.CALL, payload: null })
+        
+        let times = answer ? total : 0
+        socket.emit('endCall', {...call, times})
+        
+        dispatch({type: GLOBALTYPES.CALL, payload: null })
     }
 
     useEffect(() => {
@@ -50,6 +54,15 @@ const CallModal = () => {
     },[dispatch, answer])
 
 
+    useEffect(() => {
+        socket.on('endCallToClient', data => {
+            
+            dispatch({ type: GLOBALTYPES.CALL, payload: null })
+        })
+
+        return () => socket.off('endCallToClient')
+    },[socket, dispatch])
+
         // Answer Call
         const handleAnswer = () => {
                 setAnswer(true)
@@ -63,14 +76,23 @@ const CallModal = () => {
                     <Avatar src={call.avatar} size="super-avatar" />
                     <h4>{call.username}</h4>
                     <h6>{call.fullname}</h6>
-
-                    <div>
-                        {
-                            call.video
-                            ? <span>calling video...</span>
-                            : <span>calling audio...</span> 
-                        }
-                    </div>
+                    {
+                        answer 
+                        ? <div>
+                            <span>{ hours.toString().length < 2 ? '0' + hours : hours }</span>
+                            <span>:</span>
+                            <span>{ mins.toString().length < 2 ? '0' + mins : mins }</span>
+                            <span>:</span>
+                            <span>{ second.toString().length < 2 ? '0' + second : second }</span>
+                        </div>
+                        : <div>
+                            {
+                                call.video
+                                ? <span>calling video...</span>
+                                : <span>calling audio...</span>
+                            }
+                        </div>
+                    }
                 </div>
 
                 <div className="timer">
@@ -85,19 +107,22 @@ const CallModal = () => {
                         call_end
                     </span>
 
-                    <>
                     {
-                        call.video
-                        ? <span className="material-icons text-success"
-                        onClick={handleAnswer}>
-                            videocam
-                        </span>
-                        : <span className="material-icons text-success"
-                        onClick={handleAnswer}>
-                            call
-                        </span>
+                        (call.recipient === auth.user._id && !answer) &&
+                        <>
+                            {
+                                call.video
+                                ? <span className="material-icons text-success"
+                                onClick={handleAnswer}>
+                                    videocam
+                                </span>
+                                : <span className="material-icons text-success"
+                                onClick={handleAnswer}>
+                                    call
+                                </span>
+                            }
+                        </>
                     }
-                    </>
                 </div>
 
             </div>

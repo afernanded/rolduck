@@ -75,7 +75,7 @@ img {
 @import url("./call_modal.css");
 
 /* ----------- Responsive ------------ */
-@media (max-width: 768px) {
+@media (max-width: 766px) {
   .header .menu{
       position: absolute;
       top: calc(100vh - 50px);
@@ -108,6 +108,15 @@ img {
   }
   .message{
     height: calc(100vh - 150px);
+  }
+  .comment_input .dropdown-menu{
+    transform: translate3d(-303px, -300px, 0px) !important;
+  }
+  .reactions{
+    grid-template-columns: repeat(12, 32px);
+  }
+  .status_body .dropdown-menu{
+    transform: translate3d(-341px, -280px, 0px) !important;
   }
 }
 

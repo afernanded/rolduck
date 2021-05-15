@@ -16,6 +16,9 @@
     color: blue;
     font-weight: 600;   
 }
+.comment_input .dropdown-menu{
+    transform: translate3d(-556px, -212px, 0px) !important;
+}
 
 /* --------------- COMMENTS --------------- */
 .comment_display{

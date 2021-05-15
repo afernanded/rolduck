@@ -9,8 +9,8 @@ const Carousel = ({images, id}) => {
     const { theme } = useSelector(state => state)
 
     return (
-        <div id={`image${id}`} className="carousel slide" data-ride="carousel">
-            <ol className="carousel-indicators">
+        <div id={`image${id}`} className="carousel slide" data-interval="false" data-ride="carousel">
+            <ol className="carousel-indicators" style={{display: 'none'}}>
                 {
                     images.map((img, index) => (
                         <li key={index} data-target={`#image${id}`} 

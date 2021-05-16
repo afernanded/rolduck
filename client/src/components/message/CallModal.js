@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { useSelector, useDispatch } from 'react-redux';
-import Avatar from '../Avatar';
-import { GLOBALTYPES } from '../../redux/actions/globalTypes';
+import { useSelector, useDispatch } from 'react-redux'
+import Avatar from '../Avatar'
+import { GLOBALTYPES } from '../../redux/actions/globalTypes'
 import { addMessage } from '../../redux/actions/messageAction'
 import Ringtone from '../../audio/ringtone.mp3'
 
@@ -36,6 +36,7 @@ const CallModal = () => {
         setMins(parseInt(total/60))
         setHours(parseInt(total/3600))
     },[total])
+
 
     // End Call
     const addCallMessage = useCallback((call, times, disconnect) => {
@@ -89,17 +90,17 @@ const CallModal = () => {
     },[socket, dispatch, tracks, addCallMessage, newCall])
 
 
-        // Stream Media
-        const openStream = (video) => {
-            const config = { audio: true, video }
-            return navigator.mediaDevices.getUserMedia(config)
-        }
+    // Stream Media
+    const openStream = (video) => {
+        const config = { audio: true, video }
+        return navigator.mediaDevices.getUserMedia(config)
+    }
 
-        const playStream = (tag, stream) => {
-            let video = tag;
-            video.srcObject = stream;
-            video.play()
-        }
+    const playStream = (tag, stream) => {
+        let video = tag;
+        video.srcObject = stream;
+        video.play()
+    }
 
     // Answer Call
     const handleAnswer = () => {
@@ -158,27 +159,26 @@ const CallModal = () => {
         return () => socket.off('callerDisconnect')
     },[socket, tracks, dispatch, call, addCallMessage, answer, total, newCall])
 
-        // Play - Pause Audio
-        const playAudio = (newAudio) => {
-            newAudio.play()
+    // Play - Pause Audio
+    const playAudio = (newAudio) => {
+        newAudio.play()
+    }
+
+    const pauseAudio = (newAudio) => {
+        newAudio.pause()
+        newAudio.currentTime = 0
+    }
+
+    useEffect(() => {
+        let newAudio = new Audio(Ringtone)
+        if(answer){
+            pauseAudio(newAudio)
+        }else{
+            playAudio(newAudio)
         }
-    
-        const pauseAudio = (newAudio) => {
-            newAudio.pause()
-            newAudio.currentTime = 0
-        }
-    
-        useEffect(() => {
-            let newAudio = new Audio(Ringtone)
-            if(answer){
-                pauseAudio(newAudio)
-            }else{
-                playAudio(newAudio)
-            }
-    
-            return () => pauseAudio(newAudio)
-        },[answer])
-    
+
+        return () => pauseAudio(newAudio)
+    },[answer])
 
 
     return (
@@ -186,10 +186,12 @@ const CallModal = () => {
             <div className="call_box" style={{
                 display: (answer && call.video) ? 'none' : 'flex'
             }} >
-                <div className="text-center" style={{padding: '40px 0'}}>
+
+                <div className="text-center" style={{padding: '40px 0'}} >
                     <Avatar src={call.avatar} size="super-avatar" />
                     <h4>{call.username}</h4>
                     <h6>{call.fullname}</h6>
+
                     {
                         answer 
                         ? <div>
@@ -207,7 +209,9 @@ const CallModal = () => {
                             }
                         </div>
                     }
+                    
                 </div>
+                
                 {
                     !answer && 
                     <div className="timer">
@@ -216,8 +220,9 @@ const CallModal = () => {
                         <small>{ second.toString().length < 2 ? '0' + second : second }</small>
                     </div>
                 }
+                
 
-            <div className="call_menu">
+                <div className="call_menu">
                     <button className="material-icons text-danger"
                     onClick={handleEndCall}>
                         call_end

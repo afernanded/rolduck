@@ -107,7 +107,7 @@ img {
     margin-bottom: 60px;
   }
   .message{
-    height: calc(100vh - 150px);
+    height: calc(100vh - 100px);
   }
   .comment_input .dropdown-menu{
     transform: translate3d(-303px, -300px, 0px) !important;
@@ -117,6 +117,16 @@ img {
   }
   .status_body .dropdown-menu{
     transform: translate3d(-341px, -280px, 0px) !important;
+  }
+  .right_mess,
+  .left_mess{
+    display: none;
+  }
+  .chat_input .dropdown-menu{
+    transform: translate3d(-315px, -290px, 0px) !important;
+  }
+  .status{
+    padding: 20px 10px;
   }
 }
 

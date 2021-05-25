@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://localhost:3000' //Cambiar cuando se suba a PROD
+export const BASE_URL = 'http://localhost:3000' //If you want to deploy this app you need to change this URL for your public URL. Example: https://www.google.com

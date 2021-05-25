@@ -2,29 +2,29 @@
 
 ## Author: Alexander Fernández Díaz - 2021
 
-## Install dependencies for server
-
-### `npm install`
-
-## Install dependencies for client
-
-### `cd client ---> npm install`
-
 ### You can connect to your mongodb and add info in .env
+
+### You can put your [SERVER PATH || CLOUDINARY PATH] in client/src/utils/imageUpload.js
 
 ## --- Available Scripts ---
 
 ## In the project directory, you can run:
 
-### Server & Client
+### `npm run start` --> Start node.js server
 
-### `npm run dev`
+### `npm run server` --> Start nodemon server
 
-### `npm start`
+### `npm run server-install` --> Install all node_modules for server side
 
-### `npm run server` (Run Express only)
+### `npm run client-install` --> Install all node_modules for client side
 
-### `npm run client` (Run client only)
+### `npm run client-install` --> Install all node_modules for client side
+
+### `npm run install-all` --> Install all node_modules for client & server side
+
+### `npm run dev` --> Runs the app in dev mode
+
+### `npm run heroku-postbuild` --> Runs the app in prod mode
 
 ### Server runs on http://localhost:5000 
 
